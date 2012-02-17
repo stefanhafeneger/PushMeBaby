@@ -149,7 +149,8 @@
 - (IBAction)push:(id)sender {
 	
 	if(self.certificate == nil) {
-		return;
+        NSLog(@"you need the APNS Certificate for the app to work");
+        exit(1);
 	}
 	
 	// Validate input.

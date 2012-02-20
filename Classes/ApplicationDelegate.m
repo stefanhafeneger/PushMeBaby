@@ -24,7 +24,7 @@
 	self = [super init];
 	if(self != nil) {
 		self.deviceToken = @"";
-		self.payload = @"{\"aps\":{\"alert\":\"This is some fany message.\",\"badge\":1}}";
+		self.payload = @"{\"aps\":{\"alert\":\"This is some fancy message.\",\"badge\":1}}";
 		self.certificate = [[NSBundle mainBundle] pathForResource:@"apns" ofType:@"cer"];
 	}
 	return self;

@@ -288,7 +288,7 @@ OSStatus AcceptClientConnection(
 {  
 	struct sockaddr_in  addr;
 	int					sock;
-    int                 len;
+    socklen_t            len;
 	
     len = sizeof(struct sockaddr_in);
     sock = accept((int)listenSock, (struct sockaddr *) &addr, &len);
@@ -413,7 +413,7 @@ OSStatus SocketWrite(
 	if(oneAtATime && (*dataLength > 1)) {
 		UInt32 i;
 		UInt32 outLen;
-		UInt32 thisMove;
+		size_t thisMove;
 		
 		outLen = 0;
 		for(i=0; i<dataLen; i++) {

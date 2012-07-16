@@ -95,11 +95,11 @@
 	
 	// Create certificate.
 	NSData *certificateData = [NSData dataWithContentsOfFile:self.certificate];
-	CSSM_DATA data;
-	data.Data = (uint8 *)[certificateData bytes];
-	data.Length = [certificateData length];
-	result = SecCertificateCreateFromData(&data, CSSM_CERT_X_509v3, CSSM_CERT_ENCODING_BER, &certificate);// NSLog(@"SecCertificateCreateFromData(): %d", result);
-	
+    
+    certificate = SecCertificateCreateWithData(kCFAllocatorDefault, (CFDataRef)certificateData);
+    if (certificate == NULL)
+        NSLog (@"SecCertificateCreateWithData failled");
+    
 	// Create identity.
 	result = SecIdentityCreateWithCertificate(keychain, certificate, &identity);// NSLog(@"SecIdentityCreateWithCertificate(): %d", result);
 	
@@ -128,13 +128,16 @@
 	result = SSLClose(context);// NSLog(@"SSLClose(): %d", result);
 	
 	// Release identity.
-	CFRelease(identity);
+    if (identity != NULL)
+        CFRelease(identity);
 	
 	// Release certificate.
-	CFRelease(certificate);
+    if (certificate != NULL)
+        CFRelease(certificate);
 	
 	// Release keychain.
-	CFRelease(keychain);
+    if (keychain != NULL)
+        CFRelease(keychain);
 	
 	// Close connection to server.
 	close((int)socket);
@@ -194,7 +197,9 @@
 	
 	// Send message over SSL.
 	size_t processed = 0;
-	OSStatus result = SSLWrite(context, &message, (pointer - message), &processed);// NSLog(@"SSLWrite(): %d %d", result, processed);
+	OSStatus result = SSLWrite(context, &message, (pointer - message), &processed);
+    if (result != noErr)
+        NSLog(@"SSLWrite(): %d %zd", result, processed);
 	
 }
 
